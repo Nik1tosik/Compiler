@@ -5,30 +5,42 @@
 
 void LexicalAnalyzer::initKeyword()
 {
-	keyword["int"] = TokenType::KEYWORD;
-	keyword["float"] = TokenType::KEYWORD;
-	keyword["if"] = TokenType::KEYWORD;
-	keyword["else"] = TokenType::KEYWORD;
-	keyword["while"] = TokenType::KEYWORD;
-	keyword["return"] = TokenType::KEYWORD;
+	keyword.push_back(std::pair<std::string, TokenType>(std::string("int"), TokenType::KEYWORD));
+	keyword.push_back(std::pair<std::string, TokenType>(std::string("float"), TokenType::KEYWORD));
+	keyword.push_back(std::pair<std::string, TokenType>(std::string("if"), TokenType::KEYWORD));
+	keyword.push_back(std::pair<std::string, TokenType>(std::string("else"), TokenType::KEYWORD));
+	keyword.push_back(std::pair<std::string, TokenType>(std::string("while"), TokenType::KEYWORD));
+	keyword.push_back(std::pair<std::string, TokenType>(std::string("return"), TokenType::KEYWORD));
 }
 
-bool LexicalAnalyzer::isWhitespase(char c)
+bool LexicalAnalyzer::findWord(const std::string& word) const
+{
+	for(size_t i = 0; i < keyword.size(); ++i)
+	{
+		if(word == keyword[i].first)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+bool LexicalAnalyzer::isWhitespase(char c) const
 {
 	return (c == ' ' || c == '\t' || c == '\n' || c == '\r');
 }
 
-bool LexicalAnalyzer::isAlpha(char c)
+bool LexicalAnalyzer::isAlpha(char c) const
 {
 	return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
 }
 
-bool LexicalAnalyzer::isDigit(char c)
+bool LexicalAnalyzer::isDigit(char c) const
 {
 	return (c >= '0' && c <= '9');
 }
 
-bool LexicalAnalyzer::isAlphaNumeric(char c)
+bool LexicalAnalyzer::isAlphaNumeric(char c) const
 {
 	return isAlpha(c) || isDigit(c);
 }
@@ -84,7 +96,7 @@ std::vector<Token> LexicalAnalyzer::tokenize()
 		if(isAlpha(currentChar))
 		{
 			std::string word = getNextWord();
-			if(keyword.find(word) != keyword.end())
+			if(findWord(word))
 			{
 				tokens.push_back(Token(TokenType::KEYWORD, word));
 			}
@@ -131,7 +143,7 @@ std::vector<Token> LexicalAnalyzer::tokenize()
 	return tokens;
 }
 
-std::string LexicalAnalyzer::getTokenTypeName(TokenType type)
+std::string LexicalAnalyzer::getTokenTypeName(const TokenType& type) const
 {
 	switch(type)
 	{
@@ -146,7 +158,7 @@ std::string LexicalAnalyzer::getTokenTypeName(TokenType type)
 	}
 }
 
-void LexicalAnalyzer::printTokens(const std::vector<Token>& tokens)
+void LexicalAnalyzer::printTokens(const std::vector<Token>& tokens) const
 {
 	for(size_t i = 0; i < tokens.size(); ++i)
 	{

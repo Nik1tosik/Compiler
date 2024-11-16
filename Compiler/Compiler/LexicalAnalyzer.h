@@ -10,14 +10,17 @@ class LexicalAnalyzer
 private:
 	std::string input;
 	size_t position;
-	std::unordered_map<std::string, TokenType> keyword;
+	//std::unordered_map<std::string, TokenType> keyword;
+	std::vector<std::pair<std::string, TokenType>> keyword;
 
 	void initKeyword();
 
-	bool isWhitespase(char c);
-	bool isAlpha(char c);
-	bool isDigit(char c);
-	bool isAlphaNumeric(char c);
+	bool findWord(const std::string& word) const;
+
+	bool isWhitespase(char c) const;
+	bool isAlpha(char c) const;
+	bool isDigit(char c) const;
+	bool isAlphaNumeric(char c) const;
 
 	std::string getNextWord();
 	std::string getNextNumber();
@@ -27,8 +30,8 @@ public:
 
 	std::vector<Token> tokenize();
 
-	std::string getTokenTypeName(TokenType type);
+	std::string getTokenTypeName(const TokenType& type) const;
 
-	void printTokens(const std::vector<Token>& tokens);
+	void printTokens(const std::vector<Token>& tokens) const;
 };
 
